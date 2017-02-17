@@ -7,7 +7,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.crash.FirebaseCrash;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends AppCompatActivity {
     TextView dummyTextView;
@@ -17,6 +20,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
+        // TODO: Move this to where you establish a user session
+        logUser();
+
         setContentView(R.layout.activity_main);
 
         fatalError1 = (Button) findViewById(R.id.fatal_error_1);
@@ -48,4 +55,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void forceCrash(View view){
+        throw new RuntimeException("This is crash");
+    }
+
+    private void logUser() {
+        // TODO: Use the current user's information
+        // You can call any combination of these three methods
+        Crashlytics.setUserIdentifier("12345");
+        Crashlytics.setUserEmail("user@fabric.io");
+        Crashlytics.setUserName("Test User");
+    }
+
 }
